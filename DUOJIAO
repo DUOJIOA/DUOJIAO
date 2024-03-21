@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <title>2024年日历</title>
+    <style>
+        .calendar-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            padding: 10px;
+        }
+        .month {
+            flex: 0 1 300px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+        .day {
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .day.highlight {
+            background-color: #000;
+            color: #fff;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            text-align: center;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+        .emoji {
+            animation: float 2s ease-in-out infinite;
+            font-size: 2rem;
+            display: inline-block;
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+<nav class="container-fluid">
+    <ul>
+        <li><strong>2024年拉屎记录</strong></li>
+    </ul>
+    <ul>
+        <li><a href="#"></a></li>
+        <li><a href="#"></a></li>
+        <li><a href="#" role="button">一定一定一定要多喝水</a></li>
+    </ul>
+</nav>
+<main class="container">
+    <div class="calendar-container" id="calendarContainer"></div>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>恭喜你，成功拉屎</p>
+            <div id="emojis"></div>
+        </div>
+    </div>
+</main>
+<footer class="container">
+    <small><a href="#">骆雨洁</a> • <a href="#">专属拉屎日记</a></small>
+</footer>
+<script>
+    const months = ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"];
+    const calendarContainer = document.getElementById('calendarContainer');
+    const modal = document.getElementById('myModal');
+    const span = document.getElementsByClassName("close")[0];
+    const emojisContainer = document.getElementById('emojis');
+
+    function generateCalendar() {
+        months.forEach((month, index) => {
+            const monthDiv = document.createElement('div');
+            monthDiv.classList.add('month');
+            monthDiv.innerHTML = `<h3>${month}</h3><div class="days">${generateDays(index)}</div>`;
+            calendarContainer.appendChild(monthDiv);
+        });
+    }
+
+    function generateDays(month) {
+        // This is a simplified version and doesn't account for actual days in a month or start day of the week
+        let daysHtml = '';
+        for (let i = 1; i <= 30; i++) {
+            daysHtml += `<div class="day" onclick="highlightDay(this)">${i}</div>`;
+        }
+        return daysHtml;
+    }
+
+    function highlightDay(element) {
+        if (!element.classList.contains('highlight')) {
+            element.classList.add('highlight');
+            showModal();
+        }
+    }
+
+    function showModal() {
+        modal.style.display = "block";
+        emojisContainer.innerHTML = Array(10).fill('💩').map(emoji => `<span class="emoji">${emoji}</span>`).join('');
+    }
+
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    generateCalendar();
+</script>
+</body>
+</html>
